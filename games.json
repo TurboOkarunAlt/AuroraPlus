@@ -178,5 +178,25 @@
     "title": "Minecraft 1.12.2",
     "entry": "games/1.12.2/index.html",
     "cover": "games/1.12.2/cover.png"
-  }
+  },
+  {
+    "title": "Henry Stickmin Escaping the Prison",
+    "entry": "games/HSETP/index.html",
+    "cover": "games/HSETP/cover.png"
+  },
+  {
+    "title": "Henry Stickmin Flee the Complex",
+    "entry": "games/HSFTC/index.html",
+    "cover": "games/HSFTC/cover.png"
+  },
+  {
+    "title": "Henry Stickmin Stealing the Diamond",
+    "entry": "games/HTSTD/index.html",
+    "cover": "games/HTSTD/cover.png"
+  },
+  {
+    "title": "Henry Stickmin Infiltrating the Airship",
+    "entry": "games/HSITA/index.html",
+    "cover": "games/HSITA/cover.png"
+  
 ]
