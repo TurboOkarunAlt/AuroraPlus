@@ -10,52 +10,52 @@
     "cover": "games/bendy/cover.png"
   },
   {
-    "title": "Five nights at Freddy's",
+    "title": "Five Nights at Freddy's",
     "entry": "games/FNAF1/index.html",
     "cover": "games/FNAF1/cover.png"
   },
   {
-    "title": "Five nights at Freddy's 2",
+    "title": "Five Nights at Freddy's 2",
     "entry": "games/FNAF2/index.html",
     "cover": "games/FNAF2/cover.png"
   },
   {
-    "title": "Five nights at Freddy's 3",
+    "title": "Five Nights at Freddy's 3",
     "entry": "games/FNAF3/index.html",
     "cover": "games/FNAF3/cover.png"
   },
   {
-    "title": "Five nights at Freddy's 4",
+    "title": "Five Nights at Freddy's 4",
     "entry": "games/FNAF4/index.html",
     "cover": "games/FNAF4/cover.png"
   },
   {
-    "title": "Five nights at Freddy's Pizzeria Simulator",
+    "title": "Five Nights at Freddy's Pizzeria Simulator",
     "entry": "games/FNAFPS/index.html",
     "cover": "games/FNAFPS/cover.png"
   },
   {
-    "title": "Five nights at Freddy's Sister Location",
+    "title": "Five Nights at Freddy's Sister Location",
     "entry": "games/FNAFSL/index.html",
     "cover": "games/FNAFSL/cover.png"
   },
   {
-    "title": "Five nights at Freddy's Ultimate Custom Night",
+    "title": "Five Nights at Freddy's Ultimate Custom Night",
     "entry": "games/FNAFUCN/index.html",
     "cover": "games/FNAFUCN/cover.png"
   },
   {
-    "title": "Five nights at Freddy's World",
+    "title": "Five Nights at Freddy's World",
     "entry": "games/FNAFWORLD/index.html",
     "cover": "games/FNAFWORLD/cover.png"
   },
   {
-    "title": "FNF",
+    "title": "Friday Night Funkin'",
     "entry": "games/FNF/index.html",
     "cover": "games/FNF/cover.png"
   },
   {
-    "title": "FNF Indie Cross",
+    "title": "Friday Night Funkin' Indie Cross",
     "entry": "games/IndieCross/index.html",
     "cover": "games/IndieCross/cover.png"
   },
@@ -115,7 +115,7 @@
     "cover": "games/FruitNinja/cover.png"
   },
   {
-    "title": "Five Night's at Shrek's Hotel",
+    "title": "Five Nights at Shrek's Hotel",
     "entry": "games/FNASH/index.html",
     "cover": "games/FNASH/cover.png"
   },
@@ -150,7 +150,7 @@
     "cover": "games/Subwaysurfers/cover.png"
   },
   {
-    "title": "Fifa 11",
+    "title": "FIFA 11",
     "entry": "games/FIFA11/index.html",
     "cover": "games/FIFA11/cover.png"
   },
