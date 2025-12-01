@@ -203,5 +203,10 @@
     "title": "R.E.P.O",
     "entry": "games/repo/index.html",
     "cover": "games/repo/cover.png"
+  },
+  {
+    "title": "Slender Man The Eight Pages",
+    "entry": "games/slendermanpages/index.html",
+    "cover": "games/slendermanpages/cover.png"
   }
 ]
