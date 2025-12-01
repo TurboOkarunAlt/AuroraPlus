@@ -10,42 +10,42 @@
     "cover": "games/bendy/cover.png"
   },
   {
-    "title": "FNAF1",
+    "title": "Five nights at Freddy's",
     "entry": "games/FNAF1/index.html",
     "cover": "games/FNAF1/cover.png"
   },
   {
-    "title": "FNAF 2",
+    "title": "Five nights at Freddy's 2",
     "entry": "games/FNAF2/index.html",
     "cover": "games/FNAF2/cover.png"
   },
   {
-    "title": "FNAF 3",
+    "title": "Five nights at Freddy's 3",
     "entry": "games/FNAF3/index.html",
     "cover": "games/FNAF3/cover.png"
   },
   {
-    "title": "FNAF 4",
+    "title": "Five nights at Freddy's 4",
     "entry": "games/FNAF4/index.html",
     "cover": "games/FNAF4/cover.png"
   },
   {
-    "title": "FNAF PS",
+    "title": "Five nights at Freddy's Pizzeria Simulator",
     "entry": "games/FNAFPS/index.html",
     "cover": "games/FNAFPS/cover.png"
   },
   {
-    "title": "FNAF Sister Location",
+    "title": "Five nights at Freddy's Sister Location",
     "entry": "games/FNAFSL/index.html",
     "cover": "games/FNAFSL/cover.png"
   },
   {
-    "title": "Ultimate Custom Night",
+    "title": "Five nights at Freddy's Ultimate Custom Night",
     "entry": "games/FNAFUCN/index.html",
     "cover": "games/FNAFUCN/cover.png"
   },
   {
-    "title": "FNAF World",
+    "title": "Five nights at Freddy's World",
     "entry": "games/FNAFWORLD/index.html",
     "cover": "games/FNAFWORLD/cover.png"
   },
