@@ -173,5 +173,10 @@
     "title": "Deltarune",
     "entry": "games/Deltarune/index.html",
     "cover": "games/Deltarune/cover.png"
+  },
+  {
+    "title": "Minecraft 1.12.2",
+    "entry": "games/1.12.2/index.html",
+    "cover": "games/1.12.2/cover.png"
   }
 ]
