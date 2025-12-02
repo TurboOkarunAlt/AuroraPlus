@@ -50,6 +50,16 @@
     "cover": "games/FNAFWORLD/cover.png"
   },
   {
+    "title": "Five Nights at Candy's",
+    "entry": "games/FNAC/index.html",
+    "cover": "games/FNAC/cover.png"
+  },
+  {
+    "title": "Five Nights at Candy's 2",
+    "entry": "games/FNAC2/index.html",
+    "cover": "games/FNAC2/cover.png"
+  },
+  {
     "title": "Friday Night Funkin'",
     "entry": "games/FNF/index.html",
     "cover": "games/FNF/cover.png"
