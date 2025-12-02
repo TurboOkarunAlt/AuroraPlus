@@ -1,9 +1,3 @@
-# AuroraPlus
-An upgraded version of Aurora, A HTML5 game  launcher  for your browser! 
+# Aurora Plus 
 
-
-All games are single file.
-
-Credits to the original game owner
-
-
+Aurora is a client-side web application that serves as a game library and launcher interface. It provides a Switch-like UI for browsing, organizing, and playing HTML5/WebGL games directly in the browser. The application features game management, favorites, search/filtering, playtime tracking, and various customization options including themes and tab cloaking.
