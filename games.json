@@ -228,5 +228,10 @@
     "title": "We Become What We Behold",
     "entry": "games/WBWWB/index.html",
     "cover": "games/WBWWB/cover.png"
+  },
+  {
+    "title": "Getting Over It with Bennett Foddy",
+    "entry": "games/GOIWBF/index.html",
+    "cover": "games/GOIWBF/cover.png"
   }
 ]
