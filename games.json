@@ -258,5 +258,10 @@
     "title": "Grand Theift Auto: Vice City",
     "entry": "games/gta/index.html",
     "cover": "games/gta/cover.png"
+  },
+  {
+    "title": "Schoolboy Runaway",
+    "entry": "games/SBR/index.html",
+    "cover": "games/SBR/cover.png"
   }
 ]
