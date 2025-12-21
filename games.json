@@ -265,7 +265,7 @@
     "cover": "games/SBR/cover.png"
   },
   {
-    "title": Flappy Bird",
+    "title": "Flappy Bird",
     "entry": "games/FlappyBird/index.html",
     "cover": "games/FlappyBird/cover.png"
   }
