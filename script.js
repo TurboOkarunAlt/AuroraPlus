@@ -7,6 +7,7 @@ const playerSection = document.getElementById("playerSection");
 const homeSection = document.querySelector(".home");
 const backBtn = document.getElementById("backBtn");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
+const externalBtn = document.getElementById("externalBtn");
 const clockEl = document.getElementById("clock");
 const settingsBtn = document.getElementById("settingsBtn");
 const helpBtn = document.getElementById("helpBtn");
@@ -77,7 +78,7 @@ function playSound(type) {
     const gain = audioContext.createGain();
     osc.connect(gain);
     gain.connect(audioContext.destination);
-    
+
     if (type === 'click') {
       osc.frequency.value = 600;
       osc.type = 'sine';
@@ -245,15 +246,15 @@ function renderGames(games) {
   games.forEach((g, idx) => {
     const template = document.getElementById("cardTemplate");
     const card = template.content.cloneNode(true);
-    
+
     const img = card.querySelector(".game-cover");
     img.src = g.cover || "https://via.placeholder.com/300x200?text=" + encodeURIComponent(g.title);
     img.alt = g.title;
-    
+
     img.onerror = () => {
       img.src = "https://via.placeholder.com/300x200?text=" + encodeURIComponent(g.title);
     };
-    
+
     const titleEl = card.querySelector(".game-title");
     titleEl.textContent = g.title;
 
@@ -263,16 +264,16 @@ function renderGames(games) {
       selectGame(g, allGames.indexOf(g));
       if (g.entry) launchGame();
     };
-    
+
     cardDiv.onmouseenter = () => {
       document.querySelectorAll('.game-card.active').forEach(c => c.classList.remove('active'));
       cardDiv.classList.add('active');
     };
-    
+
     if (!g.entry) {
       cardDiv.style.opacity = "0.5";
     }
-    
+
     const playtime = playtimeData[g.title] || 0;
     if (playtime > 0) {
       const badge = document.createElement('div');
@@ -283,7 +284,7 @@ function renderGames(games) {
 
     gameStrip.appendChild(card);
   });
-  
+
   renderFavoritesBar();
 }
 
@@ -328,13 +329,13 @@ function launchGame() {
   gameFrame.src = selectedGameEntry;
   gameTitle.textContent = selectedGameTitle;
   addToRecentlyPlayed(selectedGameTitle);
-  
+
   // Clean up old timer if exists
   if (sessionTimerInterval) {
     clearInterval(sessionTimerInterval);
     sessionTimerInterval = null;
   }
-  
+
   // Start session timer
   sessionStartTime = Date.now();
   updateSessionTimer();
@@ -369,6 +370,16 @@ fullscreenBtn.onclick = () => {
     gameFrame.requestFullscreen().catch(err => showMsg("Fullscreen not available"));
   } else {
     showMsg("Fullscreen not supported");
+  }
+};
+
+externalBtn.onclick = () => {
+  playSound('click');
+  if (selectedGameEntry) {
+    window.open(selectedGameEntry, '_blank');
+    showMsg("Opening in new tab...");
+  } else {
+    showMsg("No game selected");
   }
 };
 
@@ -468,7 +479,7 @@ importBtn.onchange = (e) => {
       recentlyPlayed = backup.recentlyPlayed || [];
       playtimeData = backup.playtimeData || {};
       uploadedFaviconImage = backup.uploadedFaviconImage || null;
-      
+
       localStorage.setItem("favorites", JSON.stringify(favorites));
       localStorage.setItem("theme", currentTheme);
       localStorage.setItem("soundEnabled", JSON.stringify(soundEnabled));
@@ -477,7 +488,7 @@ importBtn.onchange = (e) => {
       localStorage.setItem("recentlyPlayed", JSON.stringify(recentlyPlayed));
       localStorage.setItem("playtimeData", JSON.stringify(playtimeData));
       localStorage.setItem("uploadedFaviconImage", uploadedFaviconImage);
-      
+
       document.documentElement.setAttribute("data-theme", currentTheme);
       updateFavicon();
       updateTabCloak();
@@ -649,7 +660,7 @@ function updateSettingsDisplay() {
   const statsRecent = document.getElementById("statsRecent");
   const storageUsage = document.getElementById("storageUsage");
   const totalPlaytime = document.getElementById("totalPlaytime");
-  
+
   if (statsRecent) statsRecent.textContent = recentlyPlayed.length;
   if (storageUsage) storageUsage.textContent = getStorageUsage() + " KB";
   if (totalPlaytime) totalPlaytime.textContent = getTotalPlaytime() + "h";
@@ -670,6 +681,21 @@ if (colorThemeSelect) {
     localStorage.setItem("colorTheme", colorTheme);
     document.documentElement.setAttribute("data-color-theme", colorTheme);
     showMsg("Theme: " + colorTheme);
+  };
+}
+
+const rgbToggle = document.getElementById("rgbToggle");
+let rgbEnabled = JSON.parse(localStorage.getItem("rgbEnabled")) !== false;
+
+if (rgbToggle) {
+  rgbToggle.checked = rgbEnabled;
+  document.documentElement.setAttribute("data-rgb", rgbEnabled ? "on" : "off");
+  
+  rgbToggle.onchange = () => {
+    rgbEnabled = rgbToggle.checked;
+    localStorage.setItem("rgbEnabled", rgbEnabled);
+    document.documentElement.setAttribute("data-rgb", rgbEnabled ? "on" : "off");
+    showMsg(rgbEnabled ? "RGB Border enabled" : "RGB Border disabled");
   };
 }
 
