@@ -697,9 +697,11 @@ settingsBtn.addEventListener("click", () => {
     if (data) {
       document.body.classList.add('custom-bg');
       document.body.style.setProperty('--custom-bg', `url(${data})`);
+      localStorage.setItem("customWallpaper", data);
     } else {
       document.body.classList.remove('custom-bg');
       document.body.style.removeProperty('--custom-bg');
+      localStorage.removeItem("customWallpaper");
     }
   }
 
