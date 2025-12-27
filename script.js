@@ -179,7 +179,7 @@ async function loadGames() {
   showMsg("Loading games...");
 
   try {
-    const res = await fetch("./games.json", { cache: "no-store" });
+    const res = await fetch("games.json", { cache: "no-store" });
 
     if (!res.ok) {
       showMsg("Error: Could not load games");
