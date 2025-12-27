@@ -268,6 +268,11 @@
     "title": "Flappy Bird",
     "entry": "games/FlappyBird/index.html",
     "cover": "games/FlappyBird/cover.png"
+  },
+  {
+    "title": "DEBUGGERSZ (Exclusive)",
+    "entry": "games/Debugger/index.html",
+    "cover": "games/Debugger/cover.png"
   }
 ]
 
