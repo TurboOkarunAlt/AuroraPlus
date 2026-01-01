@@ -273,6 +273,11 @@
     "title": "Buckshot Roulette",
     "entry": "games/Buckshot Roulette/index.html",
     "cover": "games/Buckshot Roulette/cover.png"
+  },
+  {
+    "title": "Superhot",
+    "entry": "games/Superhot/index.html",
+    "cover": "games/Superhot/cover.png"
   }
 ]
 
