@@ -293,6 +293,11 @@
     "title": "The Impossible Quiz",
     "entry": "games/TIQ/index.html",
     "cover": "games/TIQ/cover.png"
+  },
+  {
+    "title": "The Impossible Quiz 2",
+    "entry": "games/TIQ2/index.html",
+    "cover": "games/TIQ2/cover.png"
   }
 ]
 
