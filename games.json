@@ -303,6 +303,11 @@
     "title": "Whack The Creeps",
     "entry": "games/WTC/index.html",
     "cover": "games/WTC/cover.png"
+  },
+  {
+    "title": "Kill The Ice Age Baby",
+    "entry": "games/killbaby/index.html",
+    "cover": "games/killbaby/cover.png"
   }
 ]
 
