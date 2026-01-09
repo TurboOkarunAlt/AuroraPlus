@@ -308,6 +308,11 @@
     "title": "Kill The Ice Age Baby",
     "entry": "games/killbaby/index.html",
     "cover": "games/killbaby/cover.png"
+  },
+  {
+    "title": "Gorilla Tag",
+    "entry": "games/Gtag/index.html",
+    "cover": "games/Gtag/cover.png"
   }
 ]
 
