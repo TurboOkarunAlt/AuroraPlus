@@ -241,6 +241,17 @@ async function loadGames() {
     updateStats();
     updatePlaytimeDisplay();
     filterAndRenderGames();
+
+    // Check for game ID in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('game');
+    if (gameId) {
+      const game = allGames.find(g => g.title.toLowerCase().replace(/\s+/g, '-') === gameId);
+      if (game && game.entry) {
+        selectGame(game, allGames.indexOf(game));
+        launchGame();
+      }
+    }
   } catch (e) {
     showMsg("Error: " + e.message);
   }
@@ -302,6 +313,9 @@ function renderGames(games) {
     const cardDiv = card.querySelector(".game-card");
     cardDiv.dataset.index = idx;
     cardDiv.onclick = () => {
+      const gameId = g.title.toLowerCase().replace(/\s+/g, '-');
+      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?game=' + gameId;
+      window.history.pushState({ path: newUrl }, '', newUrl);
       selectGame(g, allGames.indexOf(g));
       if (g.entry) launchGame();
     };
@@ -404,6 +418,10 @@ backBtn.onclick = () => {
   playerSection.style.display = "none";
   homeSection.style.display = "flex";
   showMsg("Home");
+  
+  // Remove game ID from URL
+  const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  window.history.pushState({ path: newUrl }, '', newUrl);
 };
 
 fullscreenBtn.onclick = () => {
