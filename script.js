@@ -199,7 +199,41 @@ function updateTabCloak() {
   }
 }
 
-// Update clock every second
+const navHome = document.getElementById("navHome");
+const navRecent = document.getElementById("navRecent");
+const navFavorites = document.getElementById("navFavorites");
+
+if (navHome) {
+  navHome.onclick = (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    navHome.classList.add('active');
+    sortSelect.value = "default";
+    searchInput.value = "";
+    filterAndRenderGames();
+    backBtn.click();
+  };
+}
+
+if (navRecent) {
+  navRecent.onclick = (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    navRecent.classList.add('active');
+    recentBtn.click();
+  };
+}
+
+if (navFavorites) {
+  navFavorites.onclick = (e) => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    navFavorites.classList.add('active');
+    sortSelect.value = "favorites";
+    filterAndRenderGames();
+    backBtn.click();
+  };
+}
 function updateClock() {
   const now = new Date();
   let hours = now.getHours();
@@ -382,8 +416,9 @@ function renderGames(games) {
     cardDiv.dataset.index = idx;
     cardDiv.onclick = () => {
       const gameId = allGames.indexOf(g) + 1;
-      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?game=' + gameId;
-      window.history.pushState({ path: newUrl }, '', newUrl);
+      const url = new URL(window.location.href);
+      url.searchParams.set('game', gameId);
+      window.history.pushState({ path: url.toString() }, '', url.toString());
       selectGame(g, allGames.indexOf(g));
       if (g.entry) launchGame();
     };
@@ -491,8 +526,9 @@ if (backBtn) {
     showMsg("Home");
 
     // Remove game ID from URL
-    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-    window.history.pushState({ path: newUrl }, '', newUrl);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('game');
+    window.history.pushState({ path: url.toString() }, '', url.toString());
   };
 }
 
