@@ -109,8 +109,76 @@ function playSound(type) {
   }
 }
 
+let bgMusic = null;
+let currentMusicPath = localStorage.getItem("bgMusicPath") || "none";
+
+async function initMusic() {
+  const musicSelect = document.getElementById("musicSelect");
+  if (!musicSelect) return;
+
+  let tracks;
+  try {
+    const res = await fetch("assets/music/music.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("Primary music load failed");
+    tracks = await res.json();
+  } catch (e) {
+    console.warn("Retrying music from backup...");
+    try {
+      const backupRes = await fetch("assets/music/music_backup.json", { cache: "no-store" });
+      if (!backupRes.ok) throw new Error("Backup music load failed");
+      tracks = await backupRes.json();
+    } catch (backupError) {
+      console.error("Error: Could not load music from any source");
+      return;
+    }
+  }
+
+  if (Array.isArray(tracks)) {
+    tracks.forEach(track => {
+      const opt = document.createElement("option");
+      opt.value = `assets/music/${track.file}`;
+      opt.textContent = track.name;
+      musicSelect.appendChild(opt);
+    });
+  }
+
+  musicSelect.value = currentMusicPath;
+  
+  musicSelect.onchange = () => {
+    currentMusicPath = musicSelect.value;
+    localStorage.setItem("bgMusicPath", currentMusicPath);
+    playBgMusic();
+  };
+
+  // Start music if not none
+  if (currentMusicPath !== "none") {
+    playBgMusic();
+  }
+}
+
+function playBgMusic() {
+  if (bgMusic) {
+    bgMusic.pause();
+    bgMusic = null;
+  }
+
+  if (currentMusicPath === "none") return;
+
+  bgMusic = new Audio(currentMusicPath);
+  bgMusic.loop = true;
+  bgMusic.volume = 0.3;
+  
+  // Browsers often block autoplay until user interaction
+  document.addEventListener('click', () => {
+    if (bgMusic && bgMusic.paused && currentMusicPath !== "none") {
+      bgMusic.play().catch(() => {});
+    }
+  }, { once: true });
+}
+
 // Initialize theme and settings
 function initTheme() {
+  initMusic();
   document.documentElement.setAttribute("data-theme", currentTheme);
   document.documentElement.setAttribute("data-color-theme", colorTheme);
   
@@ -283,13 +351,13 @@ async function loadGames() {
 
   let gameList;
   try {
-    const res = await fetch("games.json", { cache: "no-store" });
+    const res = await fetch("assets/games/games.json", { cache: "no-store" });
     if (!res.ok) throw new Error("Primary load failed");
     gameList = await res.json();
   } catch (e) {
     showMsg("Retrying from backup...");
     try {
-      const backupRes = await fetch("games_backup.json", { cache: "no-store" });
+      const backupRes = await fetch("assets/games/games_backup.json", { cache: "no-store" });
       if (!backupRes.ok) throw new Error("Backup load failed");
       gameList = await backupRes.json();
     } catch (backupError) {
