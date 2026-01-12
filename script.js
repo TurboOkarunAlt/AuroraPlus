@@ -1,5 +1,5 @@
 // Aurora Game Loader – GitHub Pages Safe Build
-// Loads games from /games/ folder
+// Loads games.json from ROOT and game files from /games/
 
 // ================== ELEMENTS ==================
 const gameStrip = document.getElementById("gameStrip");
@@ -76,12 +76,12 @@ async function loadGames() {
   let gameList;
 
   try {
-    const res = await fetch("games/games.json", { cache: "no-store" });
+    const res = await fetch("games.json", { cache: "no-store" });
     if (!res.ok) throw new Error("Primary failed");
     gameList = await res.json();
   } catch {
     try {
-      const backup = await fetch("games/games_backup.json", { cache: "no-store" });
+      const backup = await fetch("games_backup.json", { cache: "no-store" });
       if (!backup.ok) throw new Error("Backup failed");
       gameList = await backup.json();
     } catch {
@@ -184,41 +184,33 @@ function startSessionTimer() {
 }
 
 // ================== CONTROLS ==================
-if (backBtn) {
-  backBtn.onclick = () => {
+backBtn.onclick = () => {
+  gameFrame.src = "";
+  playerSection.style.display = "none";
+  homeSection.style.display = "flex";
+  showMsg("Home");
+};
+
+refreshBtn.onclick = () => {
+  if (gameFrame.src) {
+    const src = gameFrame.src;
     gameFrame.src = "";
-    playerSection.style.display = "none";
-    homeSection.style.display = "flex";
-    showMsg("Home");
-  };
-}
+    setTimeout(() => gameFrame.src = src, 50);
+    showMsg("Game refreshed");
+  }
+};
 
-if (refreshBtn) {
-  refreshBtn.onclick = () => {
-    if (gameFrame.src) {
-      const src = gameFrame.src;
-      gameFrame.src = "";
-      setTimeout(() => gameFrame.src = src, 50);
-      showMsg("Game refreshed");
-    }
-  };
-}
+fullscreenBtn.onclick = () => {
+  if (gameFrame.requestFullscreen) {
+    gameFrame.requestFullscreen();
+  }
+};
 
-if (fullscreenBtn) {
-  fullscreenBtn.onclick = () => {
-    if (gameFrame.requestFullscreen) {
-      gameFrame.requestFullscreen();
-    }
-  };
-}
-
-if (externalBtn) {
-  externalBtn.onclick = () => {
-    if (selectedGameEntry) {
-      window.open(selectedGameEntry, "_blank");
-    }
-  };
-}
+externalBtn.onclick = () => {
+  if (selectedGameEntry) {
+    window.open(selectedGameEntry, "_blank");
+  }
+};
 
 // ================== SEARCH + SORT ==================
 searchInput.oninput = () => filterAndRender();
