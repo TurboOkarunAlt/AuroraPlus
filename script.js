@@ -1215,7 +1215,7 @@ passwordSubmitBtn.onclick = () => {
     // Explicitly avoiding localStorage to ensure it's not persistent.
     sessionStorage.setItem("authenticated", "true");
     passwordModal.style.display = "none";
-    showMsg("Welcome back, Commander");
+    showMsg("Was good, GAAAAANG!");
     playSound('launch');
   } else {
     passwordError.style.display = "block";
