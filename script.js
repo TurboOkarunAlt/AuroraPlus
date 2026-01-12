@@ -163,6 +163,8 @@ function applyWallpaper(data) {
     document.body.classList.remove('custom-bg');
     document.body.style.removeProperty('--custom-bg');
     localStorage.removeItem("customWallpaper");
+    // Ensure the default background image from CSS is visible
+    document.body.style.backgroundImage = "url('assets/background.jpg')";
   }
 }
 
@@ -1024,6 +1026,9 @@ function renderFavoritesBar() {
 }
 
 document.addEventListener('keydown', (e) => {
+  // Prevent number keys from launching games if the user is typing in the password input
+  if (e.target === passwordInput) return;
+
   if (playerSection.style.display === "none" && /^[1-9]$/.test(e.key)) {
     const gameNum = parseInt(e.key) - 1;
     const gameCards = document.querySelectorAll(".game-card");
@@ -1045,6 +1050,8 @@ document.addEventListener('keydown', (e) => {
 resetBtn.onclick = () => {
   if (confirm("Reset all settings to default? This will:\n- Clear favorites\n- Reset theme to dark\n- Enable sound\n- Disable tab cloak\n- Clear uploaded favicon\n- Clear recent history")) {
     localStorage.clear();
+    // Re-set the default background explicitly before reloading
+    document.body.style.backgroundImage = "url('assets/background.jpg')";
     location.reload(); // Hard reset is safest to clear all memory states
   }
 };
@@ -1117,6 +1124,41 @@ function triggerKonamiMode() {
   }, 800);
 }
 
+
+// Password Protection Logic
+const passwordModal = document.getElementById("passwordModal");
+const passwordInput = document.getElementById("passwordInput");
+const passwordSubmitBtn = document.getElementById("passwordSubmitBtn");
+const passwordError = document.getElementById("passwordError");
+const CORRECT_PASSWORD = "AuroraPlusDev510";
+
+// Check if already authenticated in this session
+if (sessionStorage.getItem("authenticated") === "true") {
+  passwordModal.style.display = "none";
+}
+
+passwordSubmitBtn.onclick = () => {
+  if (passwordInput.value === CORRECT_PASSWORD) {
+    // We already use sessionStorage, which cleared on tab close.
+    // Explicitly avoiding localStorage to ensure it's not persistent.
+    sessionStorage.setItem("authenticated", "true");
+    passwordModal.style.display = "none";
+    showMsg("Welcome back, Commander");
+    playSound('launch');
+  } else {
+    passwordError.style.display = "block";
+    passwordInput.value = "";
+    passwordInput.style.borderColor = "#ff6b6b";
+    setTimeout(() => {
+      passwordError.style.display = "none";
+      passwordInput.style.borderColor = "";
+    }, 2000);
+  }
+};
+
+passwordInput.onkeydown = (e) => {
+  if (e.key === "Enter") passwordSubmitBtn.click();
+};
 
 // Start loading when page opens
 loadGames();
