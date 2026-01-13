@@ -128,8 +128,18 @@ async function initMusic() {
       if (!backupRes.ok) throw new Error("Backup music load failed");
       tracks = await backupRes.json();
     } catch (backupError) {
-      console.error("Error: Could not load music from any source");
-      return;
+      console.warn("Retrying music from embedded data...");
+      try {
+        const musicDataEl = document.getElementById("music-data");
+        if (musicDataEl) {
+          tracks = JSON.parse(musicDataEl.textContent);
+        } else {
+          throw new Error("Embedded music data not found");
+        }
+      } catch (embeddedError) {
+        console.error("Error: Could not load music from any source");
+        return;
+      }
     }
   }
 
@@ -233,6 +243,9 @@ function applyWallpaper(data) {
     localStorage.removeItem("customWallpaper");
     // Ensure the default background image from CSS is visible
     document.body.style.backgroundImage = "url('assets/background.jpg')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundAttachment = "fixed";
   }
 }
 
@@ -361,8 +374,18 @@ async function loadGames() {
       if (!backupRes.ok) throw new Error("Backup load failed");
       gameList = await backupRes.json();
     } catch (backupError) {
-      showMsg("Error: Game's failed to load. Try again later.");
-      return;
+      showMsg("Loading from local data...");
+      try {
+        const gamesDataEl = document.getElementById("games-data");
+        if (gamesDataEl) {
+          gameList = JSON.parse(gamesDataEl.textContent);
+        } else {
+          throw new Error("Embedded data not found");
+        }
+      } catch (embeddedError) {
+        showMsg("Error: Game's failed to load. Try again later.");
+        return;
+      }
     }
   }
 
@@ -1077,10 +1100,10 @@ function renderFavoritesBar() {
   if (!favBar) return;
   const favGames = allGames.filter(g => favorites.includes(g.title)).slice(0, 9);
   if (favGames.length === 0) {
-    favBar.innerHTML = '<span style="color:var(--muted);font-size:0.9rem;">⭐ Add games to favorites to see them here</span>';
+    favBar.innerHTML = '<span style="color:var(--muted);font-size:0.9rem;">Add games to favorites to see them here</span>';
     return;
   }
-  favBar.innerHTML = '<span style="color:var(--muted);font-size:0.85rem;white-space:nowrap;">⭐ Quick Favorites:</span>';
+  favBar.innerHTML = '<span style="color:var(--muted);font-size:0.85rem;white-space:nowrap;">Quick Favorites:</span>';
   favGames.forEach((game, idx) => {
     const btn = document.createElement("button");
     btn.className = "sort-select";
@@ -1098,9 +1121,6 @@ function renderFavoritesBar() {
 }
 
 document.addEventListener('keydown', (e) => {
-  // Prevent number keys from launching games if the user is typing in the password input
-  if (e.target === passwordInput) return;
-
   if (playerSection.style.display === "none" && /^[1-9]$/.test(e.key)) {
     const gameNum = parseInt(e.key) - 1;
     const gameCards = document.querySelectorAll(".game-card");
@@ -1196,41 +1216,6 @@ function triggerKonamiMode() {
   }, 800);
 }
 
-
-// Password Protection Logic
-const passwordModal = document.getElementById("passwordModal");
-const passwordInput = document.getElementById("passwordInput");
-const passwordSubmitBtn = document.getElementById("passwordSubmitBtn");
-const passwordError = document.getElementById("passwordError");
-const CORRECT_PASSWORD = "AuroraPlusDev510";
-
-// Check if already authenticated in this session
-if (sessionStorage.getItem("authenticated") === "true") {
-  passwordModal.style.display = "none";
-}
-
-passwordSubmitBtn.onclick = () => {
-  if (passwordInput.value === CORRECT_PASSWORD) {
-    // We already use sessionStorage, which cleared on tab close.
-    // Explicitly avoiding localStorage to ensure it's not persistent.
-    sessionStorage.setItem("authenticated", "true");
-    passwordModal.style.display = "none";
-    showMsg("Was good, GAAAAANG!");
-    playSound('launch');
-  } else {
-    passwordError.style.display = "block";
-    passwordInput.value = "";
-    passwordInput.style.borderColor = "#ff6b6b";
-    setTimeout(() => {
-      passwordError.style.display = "none";
-      passwordInput.style.borderColor = "";
-    }, 2000);
-  }
-};
-
-passwordInput.onkeydown = (e) => {
-  if (e.key === "Enter") passwordSubmitBtn.click();
-};
 
 // Start loading when page opens
 loadGames();
