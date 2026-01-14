@@ -313,6 +313,11 @@
     "title": "Gorilla Tag",
     "entry": "games/Gtag/index.html",
     "cover": "games/Gtag/cover.png"
+  },
+  {
+    "title": "Candy Crush",
+    "entry": "games/CandyCrush/index.html",
+    "cover": "games/CandyCrush/cover.png"
   }
 ]
 
