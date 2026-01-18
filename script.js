@@ -1,3 +1,154 @@
+const clientToggleBtn = document.getElementById("clientToggleBtn");
+const legacyToRecentBtn = document.getElementById("legacyToRecentBtn");
+const legacyClientEl = document.getElementById("legacyClient");
+const gameGrid = document.getElementById("gameGrid");
+const legacyGameFrame = document.getElementById("legacyGameFrame");
+const welcomeScreen = document.getElementById("welcomeScreen");
+const gameCountEl = document.getElementById("gameCount");
+const legacySearchInput = document.getElementById("legacySearchInput");
+const legacyPlayerToolbar = document.getElementById("legacyPlayerToolbar");
+const legacyBackBtn = document.getElementById("legacyBackBtn");
+const legacyFullscreenBtn = document.getElementById("legacyFullscreenBtn");
+
+let currentClient = localStorage.getItem("clientType") || "recent";
+
+function initClient() {
+  document.documentElement.setAttribute("data-client", currentClient);
+  if (currentClient === "legacy") {
+    legacyClientEl.style.display = "block";
+    renderLegacyGames();
+  } else {
+    legacyClientEl.style.display = "none";
+  }
+}
+
+function renderLegacyGames() {
+  if (!gameGrid) return;
+  gameGrid.innerHTML = "";
+  let availableGames = allGames.filter(g => g.entry);
+  if (gameCountEl) gameCountEl.textContent = `${availableGames.length} Game${availableGames.length !== 1 ? "s" : ""}`;
+  
+  let activeCard = null;
+  availableGames.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "game-card-legacy";
+    card.innerHTML = `
+      <div class="game-card-header">
+        <div class="game-icon-legacy">🎮</div>
+        <div class="game-info-legacy">
+          <div class="game-title-legacy">${game.title}</div>
+          <div class="game-status-legacy">
+            <span class="status-dot-legacy"></span><span>Ready to play</span>
+          </div>
+        </div>
+      </div>
+    `;
+    card.onclick = () => {
+      if (activeCard) activeCard.classList.remove("active");
+      card.classList.add("active");
+      activeCard = card;
+      welcomeScreen.classList.add("hidden");
+      legacyGameFrame.src = game.entry;
+      legacyGameFrame.classList.add("visible");
+      if (legacyPlayerToolbar) legacyPlayerToolbar.style.display = "flex";
+      addToRecentlyPlayed(game.title);
+    };
+    gameGrid.appendChild(card);
+  });
+
+  if (legacySearchInput) {
+    legacySearchInput.addEventListener("input", e => {
+      const term = e.target.value.toLowerCase();
+      for (const card of gameGrid.children) {
+        const titleEl = card.querySelector(".game-title-legacy");
+        if (titleEl) {
+          const title = titleEl.textContent.toLowerCase();
+          card.style.display = title.includes(term) ? "block" : "none";
+        }
+      }
+    });
+  }
+}
+
+function stopAllGames() {
+  // Stop Recent client game
+  if (gameFrame) {
+    gameFrame.src = "";
+  }
+  if (playerSection) {
+    playerSection.style.display = "none";
+    homeSection.style.display = "flex";
+    playerSection.style.zIndex = "99";
+  }
+  // Stop Legacy client game
+  if (legacyGameFrame) {
+    legacyGameFrame.src = "";
+    legacyGameFrame.classList.remove("visible");
+  }
+  if (welcomeScreen) {
+    welcomeScreen.classList.remove("hidden");
+  }
+  if (legacyPlayerToolbar) {
+    legacyPlayerToolbar.style.display = "none";
+  }
+  
+  // Update playtime if a game was active
+  if (selectedGameTitle) {
+    updatePlaytime(selectedGameTitle);
+  }
+  if (sessionTimerInterval) {
+    clearInterval(sessionTimerInterval);
+    sessionTimerInterval = null;
+  }
+  sessionStartTime = null;
+  
+  // Clear active states in legacy sidebar
+  document.querySelectorAll('.game-card-legacy.active').forEach(c => c.classList.remove('active'));
+  
+  // Clear URL params
+  const url = new URL(window.location.href);
+  url.searchParams.delete('game');
+  window.history.pushState({ path: url.toString() }, '', url.toString());
+}
+
+if (clientToggleBtn) {
+  clientToggleBtn.onclick = () => {
+    stopAllGames();
+    currentClient = "legacy";
+    localStorage.setItem("clientType", currentClient);
+    initClient();
+    showMsg("Switched to Legacy client");
+  };
+}
+
+if (legacyToRecentBtn) {
+  legacyToRecentBtn.onclick = () => {
+    stopAllGames();
+    currentClient = "recent";
+    localStorage.setItem("clientType", currentClient);
+    initClient();
+    showMsg("Switched to Recent client");
+  };
+}
+
+if (legacyBackBtn) {
+  legacyBackBtn.onclick = () => {
+    legacyGameFrame.classList.remove("visible");
+    legacyGameFrame.src = "";
+    welcomeScreen.classList.remove("hidden");
+    if (legacyPlayerToolbar) legacyPlayerToolbar.style.display = "none";
+    if (document.querySelectorAll('.game-card-legacy.active')) {
+        document.querySelectorAll('.game-card-legacy.active').forEach(c => c.classList.remove('active'));
+    }
+  };
+}
+
+if (legacyFullscreenBtn) {
+  legacyFullscreenBtn.onclick = () => {
+    if (legacyGameFrame.requestFullscreen) legacyGameFrame.requestFullscreen();
+  };
+}
+
 // Aurora Game Loader – No DevTools Needed
 // All errors + status will appear on screen
 
@@ -109,86 +260,8 @@ function playSound(type) {
   }
 }
 
-let bgMusic = null;
-let currentMusicPath = localStorage.getItem("bgMusicPath") || "none";
-
-async function initMusic() {
-  const musicSelect = document.getElementById("musicSelect");
-  if (!musicSelect) return;
-
-  let tracks;
-  try {
-    const res = await fetch("assets/music/music.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("Primary music load failed");
-    tracks = await res.json();
-  } catch (e) {
-    console.warn("Retrying music from backup...");
-    try {
-      const backupRes = await fetch("assets/music/music_backup.json", { cache: "no-store" });
-      if (!backupRes.ok) throw new Error("Backup music load failed");
-      tracks = await backupRes.json();
-    } catch (backupError) {
-      console.warn("Retrying music from embedded data...");
-      try {
-        const musicDataEl = document.getElementById("music-data");
-        if (musicDataEl) {
-          tracks = JSON.parse(musicDataEl.textContent);
-        } else {
-          throw new Error("Embedded music data not found");
-        }
-      } catch (embeddedError) {
-        console.error("Error: Could not load music from any source");
-        return;
-      }
-    }
-  }
-
-  if (Array.isArray(tracks)) {
-    tracks.forEach(track => {
-      const opt = document.createElement("option");
-      opt.value = `assets/music/${track.file}`;
-      opt.textContent = track.name;
-      musicSelect.appendChild(opt);
-    });
-  }
-
-  musicSelect.value = currentMusicPath;
-  
-  musicSelect.onchange = () => {
-    currentMusicPath = musicSelect.value;
-    localStorage.setItem("bgMusicPath", currentMusicPath);
-    playBgMusic();
-  };
-
-  // Start music if not none
-  if (currentMusicPath !== "none") {
-    playBgMusic();
-  }
-}
-
-function playBgMusic() {
-  if (bgMusic) {
-    bgMusic.pause();
-    bgMusic = null;
-  }
-
-  if (currentMusicPath === "none") return;
-
-  bgMusic = new Audio(currentMusicPath);
-  bgMusic.loop = true;
-  bgMusic.volume = 0.3;
-  
-  // Browsers often block autoplay until user interaction
-  document.addEventListener('click', () => {
-    if (bgMusic && bgMusic.paused && currentMusicPath !== "none") {
-      bgMusic.play().catch(() => {});
-    }
-  }, { once: true });
-}
-
 // Initialize theme and settings
 function initTheme() {
-  initMusic();
   document.documentElement.setAttribute("data-theme", currentTheme);
   document.documentElement.setAttribute("data-color-theme", colorTheme);
   
@@ -214,19 +287,29 @@ function initTheme() {
     document.getElementById("rgbToggle").checked = rgbEnabled;
   }
 
+  const animationsEnabled = JSON.parse(localStorage.getItem("animationsEnabled")) !== false;
+  const timerEnabled = JSON.parse(localStorage.getItem("timerEnabled")) !== false;
+  const autoPlayEnabled = JSON.parse(localStorage.getItem("autoPlayEnabled")) || false;
+
   // Apply animations
+  const animationsToggle = document.getElementById("animationsToggle");
   if (animationsToggle) {
     animationsToggle.checked = animationsEnabled;
     document.body.style.animation = animationsEnabled ? "" : "none";
   }
 
   // Apply timer
+  const timerToggle = document.getElementById("timerToggle");
   if (timerToggle) {
     timerToggle.checked = timerEnabled;
-    sessionTimer.style.display = timerEnabled ? "block" : "none";
+    const sessionTimer = document.getElementById("sessionTimer");
+    if (sessionTimer) {
+      sessionTimer.style.display = timerEnabled ? "block" : "none";
+    }
   }
 
   // Apply auto-play
+  const autoPlayToggle = document.getElementById("autoPlayToggle");
   if (autoPlayToggle) {
     autoPlayToggle.checked = autoPlayEnabled;
   }
@@ -401,6 +484,7 @@ async function loadGames() {
 
   allGames = gameList;
   showMsg("Loaded " + gameList.length + " games");
+  initClient();
   initTheme();
   updateStats();
   updatePlaytimeDisplay();
@@ -521,7 +605,7 @@ function addToRecentlyPlayed(title) {
   recentlyPlayed.unshift(title);
   recentlyPlayed = recentlyPlayed.slice(0, 10);
   localStorage.setItem("recentlyPlayed", JSON.stringify(recentlyPlayed));
-  gameStartTime = Date.now();
+  sessionStartTime = Date.now(); // Initialize sessionStartTime here
 }
 
 function updatePlaytime(title) {
@@ -547,8 +631,12 @@ function launchGame() {
   playSound('launch');
   homeSection.style.display = "none";
   playerSection.style.display = "flex";
+  playerSection.style.zIndex = "99"; // Ensure it's below the main header
   if (backToTopBtn) backToTopBtn.style.display = "none";
   gameFrame.src = selectedGameEntry;
+  gameFrame.style.display = "block"; // Ensure it's visible
+  gameFrame.style.opacity = "1";
+  gameFrame.style.visibility = "visible";
   gameTitle.textContent = selectedGameTitle;
   addToRecentlyPlayed(selectedGameTitle);
 
