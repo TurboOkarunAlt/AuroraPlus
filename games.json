@@ -24,7 +24,6 @@
     "entry": "games/Raldi/index.html",
     "cover": "games/Raldi/cover.png"
   },
-
   {
     "title": "Bendy and the Ink Machine",
     "entry": "games/bendy/index.html",
@@ -319,6 +318,26 @@
     "title": "Whack The Creeps",
     "entry": "games/WTC/index.html",
     "cover": "games/WTC/cover.png"
+  },
+  {
+    "title": "Whack The Thief",
+    "entry": "games/WTT/index.html",
+    "cover": "games/WTT/cover.png"
+  },
+  {
+    "title": "Whack The Trump",
+    "entry": "games/WTTRUMP/index.html",
+    "cover": "games/WTTRUMP/cover.png"
+  },
+  {
+    "title": "Whack Your Neighbour",
+    "entry": "games/WYN/index.html",
+    "cover": "games/WYN/cover.png"
+  },
+  {
+    "title": "Whack Your Soul Mate",
+    "entry": "games/WYSM/index.html",
+    "cover": "games/WYSM/cover.png"
   },
   {
     "title": "Kill The Ice Age Baby",
