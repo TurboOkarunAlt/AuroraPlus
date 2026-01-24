@@ -373,5 +373,10 @@
     "title": "Sonic CD",
     "entry": "games/SonicCD/index.html",
     "cover": "games/SonicCD/cover.png"
+  },
+  {
+    "title": "Sonic Advance",
+    "entry": "games/SonicA/index.html",
+    "cover": "games/SonicA/cover.png"
   }
 ]
