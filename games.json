@@ -383,5 +383,15 @@
     "title": "Sonic Advance 2",
     "entry": "games/SonicA2/index.html",
     "cover": "games/SonicA2/cover.png"
+  },
+  {
+    "title": "Sonic Advance 3",
+    "entry": "games/SonicA3/index.html",
+    "cover": "games/SonicA3/cover.png"
+  },
+  {
+    "title": "Sonic Battle",
+    "entry": "games/SonicBattle/index.html",
+    "cover": "games/SonicBattle/cover.png"
   }
 ]
