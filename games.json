@@ -368,5 +368,10 @@
     "title": "Sonic the Hedgehog 3",
     "entry": "games/Sonic3/index.html",
     "cover": "games/Sonic3/cover.png"
+  },
+  {
+    "title": "Sonic CD",
+    "entry": "games/SonicCD/index.html",
+    "cover": "games/SonicCD/cover.png"
   }
 ]
